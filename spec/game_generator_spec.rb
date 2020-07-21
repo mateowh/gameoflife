@@ -1,7 +1,7 @@
-# frozen_string_literal: false
-
 require 'rspec'
 require 'game_generator'
+require 'grid_factory'
+require 'presenter'
 
 describe 'GameGenerator' do
   let(:input) { 'test' }
@@ -17,14 +17,27 @@ describe 'GameGenerator' do
 
   describe 'call' do
     it 'returns input as a 2d array of characters' do
-      expect(subject.call).to eq([%w[t e s t]])
+      expect { subject.call }.to output('test').to_stdout
     end
 
     context 'when multiple lines of input' do
-      let(:input) { 'I/nam/na/ntest' }
+      let(:input) { "I\nam\na\ntest" }
       it 'splits each line into separate array' do
-        expect(subject.call).to eq([%w[I], %w[a m], %w[a], %w[t e s t]])
+        expect { subject.call }.to output("I\nam\na\ntest").to_stdout
       end
+    end
+
+    context 'it delegates to other classes' do
+      let(:input) { "I\nam\na\ntest" }
+      let(:grid) { [%w[I], %w[am], %w[a], %w[t e s t]] }
+
+      it 'calls GridFactory' do
+        expect(GridFactory).to receive(:new).with(input).and_return(double(call: grid))
+
+        subject.call
+      end
+
+      it 'calls Presenter'
     end
   end
 end

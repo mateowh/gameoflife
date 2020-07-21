@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Creates a grid (2d array) from the user's input
 class GridFactory
   def initialize(input)
@@ -15,6 +13,11 @@ class GridFactory
   private
 
   def split_input
-    input.split('/n').map { |a| a.split('') }
+    # TODO: Ruby 2.7 has filter_map method, upgrade for this
+    input.split('/n').map { |a| a.split('') unless comment?(a) }.compact
+  end
+
+  def comment?(row)
+    row.chars.first == '!'
   end
 end

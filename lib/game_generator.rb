@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-
 require_relative 'grid_factory'
+require_relative 'presenter'
 
 # Initializes the universe and delegates processing steps
 class GameGenerator
@@ -11,12 +10,16 @@ class GameGenerator
   attr_accessor :input
 
   def call
-    grid
+    present_game_output
   end
 
   private
 
   def grid
     GridFactory.new(input).call
+  end
+
+  def present_game_output
+    Presenter.new(grid).call
   end
 end
