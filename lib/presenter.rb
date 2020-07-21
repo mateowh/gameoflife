@@ -7,6 +7,10 @@ class Presenter
   attr_reader :grid
 
   def call
-    print grid.map { |a| a.join('') }.join("\n")
+    print grid.map { |a| present_row(a).join('') }.join("\n")
+  end
+
+  def present_row(row)
+    row.map(&:state)
   end
 end
