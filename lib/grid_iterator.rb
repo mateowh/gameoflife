@@ -1,4 +1,3 @@
-require 'byebug'
 require_relative 'cell'
 
 # Updates a grid of cells through one iteration

@@ -17,7 +17,6 @@ class GridFactory
   private
 
   def process_input
-    # TODO: Ruby 2.7 has filter_map method, upgrade for this
     rows = input.split("\n")
     rows.map! { |row| process_row(row) }.compact
   end

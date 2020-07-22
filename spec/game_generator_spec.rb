@@ -22,7 +22,6 @@ describe 'GameGenerator' do
     end
 
     context 'it delegates to other classes' do
-      # TODO: dry this
       let(:cell) { instance_double(Cell) }
       before { allow(cell).to receive(:state) }
       before { allow(cell).to receive(:kill!) }
