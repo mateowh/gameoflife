@@ -16,13 +16,17 @@ describe 'GameGenerator' do
   end
 
   describe 'call' do
+    let(:game_output) { "...\n...\n..." }
     it 'returns input as a 2d array of characters' do
-      expect { subject.call }.to output(input).to_stdout
+      expect { subject.call }.to output(game_output).to_stdout
     end
 
     context 'it delegates to other classes' do
+      # TODO: dry this
       let(:cell) { instance_double(Cell) }
       before { allow(cell).to receive(:state) }
+      before { allow(cell).to receive(:kill) }
+      before { allow(cell).to receive(:alive?) }
       let(:grid) { [[cell, cell, cell], [cell, cell, cell], [cell, cell, cell]] }
 
       it 'calls GridFactory' do

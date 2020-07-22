@@ -9,5 +9,21 @@ class Cell
     @state = initial_state
   end
 
-  attr_reader :state
+  attr_accessor :state
+
+  def kill
+    @state = Cell::DEAD
+  end
+
+  def revive
+    @state = Cell::ALIVE
+  end
+
+  def alive?
+    state == Cell::ALIVE
+  end
+
+  def dead?
+    state == Cell::DEAD
+  end
 end
