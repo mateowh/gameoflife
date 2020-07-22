@@ -23,6 +23,7 @@ class GridIterator
   def update_cell(cell, x_position, y_position)
     neighbours = neighbours(cell, x_position, y_position)
     cell.kill if cell.alive? && alive_neighbours(neighbours) < 2
+    cell.kill if cell.alive? && alive_neighbours(neighbours) > 3
 
     cell
   end
