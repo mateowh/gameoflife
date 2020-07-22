@@ -7,7 +7,7 @@ describe 'GridIterator' do
   let(:cell_1_2) { build(:cell, :dead) }
   let(:cell_1_3) { build(:cell, :dead) }
   let(:cell_2_1) { build(:cell, :dead) }
-  let(:cell_2_2) { build(:cell, :alive) }
+  let(:cell_2_2) { build(:cell, :dead) }
   let(:cell_2_3) { build(:cell, :dead) }
   let(:cell_3_1) { build(:cell, :dead) }
   let(:cell_3_2) { build(:cell, :dead) }
@@ -32,71 +32,85 @@ describe 'GridIterator' do
       expect(subject.call).to eq(grid)
     end
 
-    context 'when cells have no live neighbours' do
-      it 'kills these cells' do
-        expect { subject.call }.to change { cell_2_2.state }.from(Cell::ALIVE).to(Cell::DEAD)
+    it 'returns all dead cells unchanged' do
+      subject.call
+      expect(grid.flatten.map(&:state).uniq).to eq([Cell::DEAD])
+    end
+
+    context 'when there is a live cell' do
+      let(:cell_2_2) { build(:cell, :alive) }
+      context 'and it has no live neighbours' do
+        it 'kills this cell' do
+          expect { subject.call }.to change { cell_2_2.state }.from(Cell::ALIVE).to(Cell::DEAD)
+        end
       end
 
-      it 'does not change the other cells' do
-        dead_cells = grid.flatten - [cell_2_2]
-        subject.call
-        expect(dead_cells.map(&:state).uniq).to eq([Cell::DEAD])
+      context 'and it has only one live neighbour' do
+        let(:cell_1_1) { build(:cell, :alive) }
+        it 'kills this cell' do
+          expect { subject.call }
+            .to change { cell_1_1.state }
+            .from(Cell::ALIVE).to(Cell::DEAD)
+            .and change { cell_2_2.state }
+            .from(Cell::ALIVE).to(Cell::DEAD)
+        end
+      end
+
+      context 'and it has 2 live neighbours' do
+        let(:cell_1_2) { build(:cell, :alive) }
+        let(:cell_3_2) { build(:cell, :alive) }
+        it 'keeps this cell alive' do
+          expect { subject.call }.not_to change(cell_2_2, :state)
+        end
+      end
+
+      context 'and it has 3 live neighbours' do
+        let(:cell_1_2) { build(:cell, :alive) }
+        let(:cell_1_1) { build(:cell, :alive) }
+        let(:cell_3_3) { build(:cell, :alive) }
+        it 'keeps this cell alive' do
+          expect { subject.call }.not_to change(cell_2_2, :state)
+        end
+      end
+
+      context 'when a cell has more than 3 live neighbours' do
+        let(:cell_1_2) { build(:cell, :alive) }
+        let(:cell_2_1) { build(:cell, :alive) }
+        let(:cell_2_3) { build(:cell, :alive) }
+        let(:cell_3_2) { build(:cell, :alive) }
+        it 'kills this cell' do
+          expect { subject.call }.to change { cell_2_2.state }.from(Cell::ALIVE).to(Cell::DEAD)
+        end
       end
     end
 
-    context 'when cells have only one live neighbour' do
-      let(:cell_1_1) { build(:cell, :alive) }
-      it 'kills these cells' do
-        expect { subject.call }
-          .to change { cell_1_1.state }
-          .from(Cell::ALIVE).to(Cell::DEAD)
+    context 'when there is a deal cell' do
+      it 'stays dead' do
+        expect { subject.call }.not_to change(cell_2_2, :state)
       end
 
-      it 'does not change the other cells' do
-        dead_cells = grid.flatten - [cell_2_2, cell_1_1]
-        subject.call
-        expect(dead_cells.map(&:state).uniq).to eq([Cell::DEAD])
-      end
-    end
+      context 'and it has at least 1 live neighbour' do
+        let(:cell_1_1) { build(:cell, :alive) }
+        it 'stays dead' do
+          expect { subject.call }.not_to change(cell_2_2, :state)
+        end
 
-    context 'when cells have 2 live neighbours' do
-      let(:cell_1_2) { build(:cell, :alive) }
-      let(:cell_2_1) { build(:cell, :alive) }
-      it 'keeps these cells alive' do
-        subject.call
-        live_cells = [cell_1_2, cell_2_1, cell_2_2]
-        expect(live_cells.map(&:state).uniq).to eq([Cell::ALIVE])
-        dead_cells = grid.flatten - live_cells
-        expect(dead_cells.map(&:state).uniq).to eq([Cell::DEAD])
-      end
-    end
+        context 'and exactly 3 in total' do
+          let(:cell_1_2) { build(:cell, :alive) }
+          let(:cell_1_3) { build(:cell, :alive) }
+          it 'comes alive' do
+            expect { subject.call }.to change { cell_2_2.state }.from(Cell::DEAD).to(Cell::ALIVE)
+          end
+        end
 
-    context 'when cells have 3 live neighbours' do
-      let(:cell_1_1) { build(:cell, :alive) }
-      let(:cell_1_2) { build(:cell, :alive) }
-      let(:cell_2_1) { build(:cell, :alive) }
-      it 'keeps these cells alive' do
-        subject.call
-        live_cells = [cell_1_1, cell_1_2, cell_2_1, cell_2_2]
-        expect(live_cells.map(&:state).uniq).to eq([Cell::ALIVE])
-        dead_cells = grid.flatten - live_cells
-        expect(dead_cells.map(&:state).uniq).to eq([Cell::DEAD])
-      end
-    end
-
-    context 'when a cell has more than 3 live neighbours' do
-      let(:cell_1_2) { build(:cell, :alive) }
-      let(:cell_2_1) { build(:cell, :alive) }
-      let(:cell_2_3) { build(:cell, :alive) }
-      let(:cell_3_2) { build(:cell, :alive) }
-      it 'kills this cell' do
-        expect { subject.call }.to change { cell_2_2.state }.from(Cell::ALIVE).to(Cell::DEAD)
-      end
-
-      it 'leaves other cells unchanges' do
-        subject.call
-        alive_cells = [cell_1_2, cell_2_1, cell_2_3, cell_3_2]
-        expect(alive_cells.map(&:state).uniq).to eq([Cell::ALIVE])
+        context 'and more than 3' do
+          let(:cell_1_2) { build(:cell, :alive) }
+          let(:cell_1_3) { build(:cell, :alive) }
+          let(:cell_2_1) { build(:cell, :alive) }
+          it 'stays dead' do
+            expect { subject.call }.not_to change(cell_2_2, :state)
+          end
+        end
       end
     end
   end

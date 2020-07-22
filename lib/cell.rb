@@ -11,11 +11,11 @@ class Cell
 
   attr_accessor :state
 
-  def kill
+  def kill!
     @state = Cell::DEAD
   end
 
-  def revive
+  def revive!
     @state = Cell::ALIVE
   end
 

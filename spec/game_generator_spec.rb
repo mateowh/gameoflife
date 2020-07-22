@@ -25,8 +25,10 @@ describe 'GameGenerator' do
       # TODO: dry this
       let(:cell) { instance_double(Cell) }
       before { allow(cell).to receive(:state) }
-      before { allow(cell).to receive(:kill) }
+      before { allow(cell).to receive(:kill!) }
+      before { allow(cell).to receive(:revive!) }
       before { allow(cell).to receive(:alive?) }
+      before { allow(cell).to receive(:dead?) }
       let(:grid) { [[cell, cell, cell], [cell, cell, cell], [cell, cell, cell]] }
 
       it 'calls GridFactory' do
@@ -35,7 +37,11 @@ describe 'GameGenerator' do
         subject.call
       end
 
-      it 'calls Presenter'
+      it 'calls Presenter' do
+        expect(Presenter).to receive(:new).with(Array).and_return(double(call: String))
+
+        subject.call
+      end
     end
 
     context 'when the input has invalid characters' do

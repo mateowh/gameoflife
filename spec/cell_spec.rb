@@ -33,12 +33,30 @@ describe 'Cell' do
     end
   end
 
-  describe 'kill' do
-    it 'responds'
+  describe 'kill!' do
+    it 'kills the cell' do
+      expect { subject.kill! }.to change { subject.state }.from(Cell::ALIVE).to(Cell::DEAD)
+    end
+
+    context 'when cell is already dead' do
+      let(:inital_state) { Cell::DEAD }
+      it 'has no effect' do
+        expect { subject.kill! }.not_to change(subject, :state)
+      end
+    end
   end
 
-  describe 'revive' do
-    it 'responds'
+  describe 'revive!' do
+    it 'has no effect on a live cell' do
+      expect { subject.revive! }.not_to change(subject, :state)
+    end
+
+    context 'when the cell is dead' do
+      let(:inital_state) { Cell::DEAD }
+      it 'changes the state to alive' do
+        expect { subject.revive! }.to change { subject.state }.from(Cell::DEAD).to(Cell::ALIVE)
+      end
+    end
   end
 
   describe 'alive?' do
