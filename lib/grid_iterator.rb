@@ -1,6 +1,6 @@
 require_relative 'cell'
 
-# Updates a grid of cells through one iteration
+# Updates a grid of Cell classes through one iteration
 class GridIterator
   def initialize(initial_grid)
     @initial_grid = initial_grid

@@ -1,6 +1,7 @@
 require 'rspec'
 require 'game_generator'
 require 'grid_factory'
+require 'grid_iterator'
 require 'presenter'
 
 describe 'GameGenerator' do
@@ -17,30 +18,34 @@ describe 'GameGenerator' do
 
   describe 'call' do
     let(:game_output) { "...\n...\n..." }
-    it 'returns input as a 2d array of characters' do
+    it 'applies the rules of the game and returns a series of characters to standard output' do
       expect { subject.call }.to output(game_output).to_stdout
     end
 
-    context 'it delegates to other classes' do
-      let(:cell) { instance_double(Cell) }
-      before { allow(cell).to receive(:state) }
-      before { allow(cell).to receive(:kill!) }
-      before { allow(cell).to receive(:revive!) }
-      before { allow(cell).to receive(:alive?) }
-      before { allow(cell).to receive(:dead?) }
-      let(:grid) { [[cell, cell, cell], [cell, cell, cell], [cell, cell, cell]] }
+    let(:cell) { instance_double(Cell) }
+    before { allow(cell).to receive(:state) }
+    before { allow(cell).to receive(:kill!) }
+    before { allow(cell).to receive(:revive!) }
+    before { allow(cell).to receive(:alive?) }
+    before { allow(cell).to receive(:dead?) }
+    let(:grid) { [[cell, cell, cell], [cell, cell, cell], [cell, cell, cell]] }
 
-      it 'calls GridFactory' do
-        expect(GridFactory).to receive(:new).with(input).and_return(double(call: grid))
+    it 'initializes and calls GridFactory' do
+      expect(GridFactory).to receive(:new).with(input).and_return(double(call: grid))
 
-        subject.call
-      end
+      subject.call
+    end
 
-      it 'calls Presenter' do
-        expect(Presenter).to receive(:new).with(Array).and_return(double(call: String))
+    it 'initializes and calls GridIterator' do
+      expect(GridIterator).to receive(:new).with(Array).and_return(double(call: grid))
 
-        subject.call
-      end
+      subject.call
+    end
+
+    it 'initializes and calls Presenter' do
+      expect(Presenter).to receive(:new).with(Array).and_return(double(call: String))
+
+      subject.call
     end
 
     context 'when the input has invalid characters' do

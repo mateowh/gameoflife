@@ -14,20 +14,24 @@ describe 'GridFactory' do
 
   describe 'call' do
     it 'returns input as an array of arrays split by new line' do
-      expect(subject.call).to match_array([
-                                            [dead_cell, dead_cell, dead_cell],
-                                            [dead_cell, dead_cell, live_cell],
-                                            [dead_cell, live_cell, dead_cell]
-                                          ])
+      expect(subject.call).to match_array(
+        [
+          [dead_cell, dead_cell, dead_cell],
+          [dead_cell, dead_cell, live_cell],
+          [dead_cell, live_cell, dead_cell]
+        ]
+      )
     end
 
     context 'when the input is marked to be ignored (starting with a !)' do
       let(:input) { "!testing\n...\n.O." }
       it 'drops these rows and returns the rest' do
-        expect(subject.call).to match_array([
-                                              [dead_cell, dead_cell, dead_cell],
-                                              [dead_cell, live_cell, dead_cell]
-                                            ])
+        expect(subject.call).to match_array(
+          [
+            [dead_cell, dead_cell, dead_cell],
+            [dead_cell, live_cell, dead_cell]
+          ]
+        )
       end
     end
 

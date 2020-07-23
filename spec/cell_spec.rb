@@ -9,7 +9,7 @@ describe 'Cell' do
     expect(subject.is_a?(Cell)).to be true
   end
 
-  context 'when created in alive state' do
+  context 'when created as alive' do
     it 'is has alive state' do
       expect(subject.state).to eq(Cell::ALIVE)
     end
@@ -20,7 +20,7 @@ describe 'Cell' do
     end
   end
 
-  context 'when created in dead state' do
+  context 'when created as dead' do
     let(:inital_state) { Cell::DEAD }
 
     it 'is has dead state' do
