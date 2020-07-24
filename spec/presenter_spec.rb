@@ -1,8 +1,6 @@
-require 'rspec'
 require 'presenter'
-require 'cell'
 
-describe 'Presenter' do
+RSpec.describe Presenter do
   let(:cell) { instance_double(Cell) }
   before { allow(cell).to receive(:state) }
   let(:grid) do

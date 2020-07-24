@@ -1,10 +1,6 @@
-require 'rspec'
 require 'game_generator'
-require 'grid_factory'
-require 'grid_iterator'
-require 'presenter'
 
-describe 'GameGenerator' do
+RSpec.describe GameGenerator do
   let(:input) { "...\n..O\n.O." }
   before(:each) do
     allow($stdin).to receive(:gets).and_return(input)

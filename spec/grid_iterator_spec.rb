@@ -1,8 +1,6 @@
-require 'rspec'
 require 'grid_iterator'
-require 'cell'
 
-describe 'GridIterator' do
+RSpec.describe GridIterator do
   let(:cell_1_1) { build(:cell, :dead) }
   let(:cell_1_2) { build(:cell, :dead) }
   let(:cell_1_3) { build(:cell, :dead) }

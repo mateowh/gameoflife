@@ -1,7 +1,6 @@
-require 'rspec'
 require 'grid_factory'
 
-describe 'GridFactory' do
+RSpec.describe GridFactory do
   let(:input) { "...\n..O\n.O." }
   let(:dead_cell) { have_attributes(class: Cell, state: '.') }
   let(:live_cell) { have_attributes(class: Cell, state: 'O') }

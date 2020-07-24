@@ -1,7 +1,6 @@
-require 'rspec'
 require 'cell'
 
-describe 'Cell' do
+RSpec.describe Cell do
   let(:inital_state) { Cell::ALIVE }
   subject { Cell.new(inital_state) }
 
