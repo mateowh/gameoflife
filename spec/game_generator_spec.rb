@@ -8,10 +8,6 @@ RSpec.describe GameGenerator do
 
   subject { GameGenerator.new($stdin.gets) }
 
-  it 'is a GameGenerator object' do
-    expect(subject.is_a?(GameGenerator)).to be true
-  end
-
   describe 'call' do
     let(:game_output) { "...\n...\n..." }
     it 'applies the rules of the game and returns a series of characters to standard output' do

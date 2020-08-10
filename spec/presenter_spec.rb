@@ -11,10 +11,6 @@ RSpec.describe Presenter do
   end
   subject { Presenter.new(grid) }
 
-  it 'is a Presenter object' do
-    expect(subject.is_a?(Presenter)).to be true
-  end
-
   describe 'call' do
     let(:dead_cell) { instance_double(Cell) }
     let(:live_cell) { instance_double(Cell) }

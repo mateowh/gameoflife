@@ -4,10 +4,6 @@ RSpec.describe Cell do
   let(:inital_state) { Cell::ALIVE }
   subject { Cell.new(inital_state) }
 
-  it 'is a Cell object' do
-    expect(subject.is_a?(Cell)).to be true
-  end
-
   context 'when created as alive' do
     it 'is has alive state' do
       expect(subject.state).to eq(Cell::ALIVE)

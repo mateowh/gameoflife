@@ -7,10 +7,6 @@ RSpec.describe GridFactory do
 
   subject { GridFactory.new(input) }
 
-  it 'is a GridFactory object' do
-    expect(subject.is_a?(GridFactory)).to be true
-  end
-
   describe 'call' do
     it 'returns input as an array of arrays split by new line' do
       expect(subject.call).to match_array(

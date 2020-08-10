@@ -28,10 +28,6 @@ RSpec.describe GridIterator do
 
   subject { GridIterator.new(grid) }
 
-  it 'is a GridIterator object' do
-    expect(subject.is_a?(GridIterator)).to be true
-  end
-
   describe 'call' do
     it 'returns a grid in the same format as the input' do
       expect(subject.call).to be_an_instance_of(Array)
